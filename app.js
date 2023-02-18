@@ -39,14 +39,14 @@ const httpRequestListener = (request, response) => {
 
   if (method === "POST") {
     if (url === "/users/signup") {
-      let body = "";
+      let usersInformaiton = "";
 
       request.on("data", (data) => {
-        body = body + data;
+        usersInformaiton = usersInformaiton + data;
       });
 
       request.on("end", () => {
-        const user = JSON.parse(body);
+        const user = JSON.parse(usersInformaiton);
 
         users.push({
           id: user.id,
@@ -57,6 +57,26 @@ const httpRequestListener = (request, response) => {
 
         response.writeHead(200, { "Content-Type": "application/json" });
         response.end(JSON.stringify({ users: users }));
+      });
+    } else if (url === "/users/post") {
+      let usersPost = "";
+
+      request.on("data", (data) => {
+        usersPost = usersPost + data;
+      });
+
+      request.on("end", () => {
+        const post = JSON.parse(usersPost);
+
+        posts.push({
+          id: post.id,
+          title: post.title,
+          content: post.content,
+          userId: post.userId,
+        });
+
+        response.writeHead(200, { "Content-Type": "application/json" });
+        response.end(JSON.stringify({ posts: posts }));
       });
     }
   }
