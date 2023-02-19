@@ -30,7 +30,7 @@ const posts = [
     id: 2,
     title: "HTTP의 특성",
     content: "Request/Response와 Stateless",
-    userId: 1,
+    userId: 2,
   },
 ];
 
@@ -78,6 +78,23 @@ const httpRequestListener = (request, response) => {
         response.writeHead(200, { "Content-Type": "application/json" });
         response.end(JSON.stringify({ posts: posts }));
       });
+    }
+  } else if (method === "GET") {
+    if (url === "/users/list") {
+      let postList = [];
+
+      for (let i = 0; i < posts.length; i++) {
+        postList.push({
+          userID: posts[i].userId,
+          userName: users[posts[i].userId - 1].name,
+          postingId: posts[i].id,
+          postingTitle: posts[i].title,
+          postingContent: posts[i].content,
+        });
+      }
+
+      response.writeHead(200, { "Content-Type": "application/json" });
+      response.end(JSON.stringify({ list: postList }));
     }
   }
 };
